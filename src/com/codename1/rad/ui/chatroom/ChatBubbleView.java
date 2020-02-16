@@ -9,7 +9,6 @@ import com.codename1.rad.ui.AbstractEntityView;
 import com.codename1.rad.ui.Actions;
 import com.codename1.rad.ui.DefaultEntityListCellRenderer;
 import com.codename1.rad.ui.EntityView;
-import com.codename1.rad.ui.ViewProperty;
 import com.codename1.rad.ui.image.AsyncImage;
 import com.codename1.rad.ui.image.FirstCharEntityImageRenderer;
 import com.codename1.rad.ui.menus.PopupActionsMenu;
@@ -30,11 +29,11 @@ import com.codename1.rad.schemas.ChatMessage;
 import com.codename1.rad.schemas.Comment;
 import com.codename1.rad.schemas.ListRowItem;
 import com.codename1.rad.schemas.Thing;
-import com.codename1.rad.text.LocalDateShortStyleFormatter;
 import com.codename1.rad.text.LocalDateTimeShortStyleFormatter;
-import com.codename1.charts.util.ColorUtil;
 import com.codename1.components.SpanLabel;
 import com.codename1.io.Log;
+import com.codename1.rad.attributes.UIID;
+import com.codename1.rad.nodes.ActionNode;
 import com.codename1.rad.ui.entityviews.EntityListView;
 import static com.codename1.ui.CN.NORTH;
 import static com.codename1.ui.CN.WEST;
@@ -42,14 +41,14 @@ import com.codename1.ui.Component;
 import static com.codename1.ui.ComponentSelector.$;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
-import com.codename1.ui.Graphics;
 import com.codename1.ui.Label;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.RoundRectBorder;
-import com.codename1.util.DateUtil;
 import java.util.Date;
 import java.util.Objects;
 
@@ -58,8 +57,21 @@ import java.util.Objects;
  * @author shannah
  */
 public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
-    public static final Category CHAT_MESSAGE_ACTIONS = new Category();
+    
+    /**
+     * Actions displayed in popup menu when user long presses a chat bubble.
+     */
+    public static final Category CHAT_BUBBLE_ACTIONS = new Category();
+    
+    /**
+     * Actions displayed in popup menu when user long presses a user avatar.
+     */
     public static final Category CHAT_SENDER_ACTIONS = new Category();
+    
+    /**
+     * Actions displayed as "badges" of a chat bubble.
+     */
+    public static final Category CHAT_BUBBLE_BADGES = new Category();
     
     
     private boolean hideDate;
@@ -180,7 +192,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         }
         
         if (changed) {
-            System.out.println("Updating chat butbble");
+            
             wrapper.removeAll();
             wrapper.remove();
             removeAll();
@@ -211,7 +223,36 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 text.setUIID("ChatBubbleSpanLabelOwn");
                 text.setTextUIID("ChatBubbleTextOwn");
                 $(text).setBorder(border);
-                center.add(FlowLayout.encloseRight(text));
+                Component right = text;
+                Actions badges = viewNode.getInheritedActions(CHAT_BUBBLE_BADGES);
+                
+                
+                if (!badges.isEmpty()) {
+                    Actions styledBadges = new Actions();
+                    for (ActionNode a : badges) {
+                        UIID u = a.getUIID();
+                        if (u == null) {
+                            u = new UIID("ChatBubbleBadge");
+                            ActionNode styled = (ActionNode)a.createProxy(viewNode);
+                            styled.setAttributes(u);
+                            styledBadges.add(styled);
+                        } else {
+                            styledBadges.add(a);
+                        }
+                    }
+                    Container badgesCnt = new Container(new GridLayout(badges.size(), 1));
+                    styledBadges.addToContainer(badgesCnt, getEntity());
+                    Container rightCnt = new Container(new LayeredLayout());
+                    rightCnt.addComponent(text);
+                    rightCnt.addComponent(badgesCnt);
+                    LayeredLayout ll = (LayeredLayout)rightCnt.getLayout();
+                    ll.setInsets(badgesCnt, "0 auto auto 0");
+                    $(text).setMarginMillimeters(0, 0, 0, 3);
+                    right = rightCnt;
+                    
+                }
+                
+                center.add(FlowLayout.encloseRight(right));
             } else {
                 $(wrapper).setPaddingMillimeters(1, 10, 1, 1);
                 if (postedByLabel.getText() != null && postedByLabel.getText().length() > 0) {
@@ -229,7 +270,37 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 text.setUIID("ChatBubbleSpanLabelOther");
                 text.setTextUIID("ChatBubbleTextOther");
                 $(text).setBorder(border);
-                center.add(FlowLayout.encloseIn(text));
+                
+                Component right = text;
+                Actions badges = viewNode.getInheritedActions(CHAT_BUBBLE_BADGES);
+                System.out.println("Badges size: "+badges.size());
+                if (!badges.isEmpty()) {
+                    System.out.println("Adding badges");
+                    Actions styledBadges = new Actions();
+                    for (ActionNode a : badges) {
+                        UIID u = a.getUIID();
+                        if (u == null) {
+                            u = new UIID("ChatBubbleBadge");
+                            ActionNode styled = (ActionNode)a.createProxy(viewNode);
+                            styled.setAttributes(u);
+                            styledBadges.add(styled);
+                        } else {
+                            styledBadges.add(a);
+                        }
+                    }
+                    Container badgesCnt = new Container(new GridLayout(badges.size(), 1));
+                    styledBadges.addToContainer(badgesCnt, getEntity());
+                    Container rightCnt = new Container(new LayeredLayout());
+                    rightCnt.addComponent(text);
+                    rightCnt.addComponent(badgesCnt);
+                    LayeredLayout ll = (LayeredLayout)rightCnt.getLayout();
+                    ll.setInsets(badgesCnt, "0 0 auto auto");
+                    $(text).setMarginMillimeters(0, 3, 0, 0);
+                    right = rightCnt;
+                    
+                }
+                
+                center.add(FlowLayout.encloseIn(right));
                 
                 wrapper.add(WEST, BoxLayout.encloseYBottom(iconLabel));
             }
@@ -335,7 +406,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         if (text.contains(evt.getX(), evt.getY())) {
             
             ViewNode node = (ViewNode)getViewNode();
-            Actions chatActions = node.getInheritedActions(CHAT_MESSAGE_ACTIONS);
+            Actions chatActions = node.getInheritedActions(CHAT_BUBBLE_ACTIONS);
             if (!chatActions.isEmpty()) {
                 PopupActionsMenu menu = new PopupActionsMenu(chatActions, getEntity(), this);
                 menu.showPopupDialog(text);
@@ -385,6 +456,8 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
          */
         public static final Tag isOwnTag = ChatMessage.isOwnMessage;
         
+        public static final Tag isFavorite = ChatMessage.isFavorite;
+        
         /**
          * Tag used for the "icon" property of a chat message.  The field may be any content
          * type that can be converted to an {@link AsyncImage}.  This includes a string (with a URL,
@@ -407,7 +480,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         public static final Tag messageTextTag = Comment.text;
         
         public static StringProperty postedBy, iconUrl, messageText;
-        public static BooleanProperty own;
+        public static BooleanProperty own, favorite;
         public static DateProperty date;
         private static final EntityType TYPE = new EntityType(){{
             postedBy = string(tags(postedByTag));
@@ -415,14 +488,18 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             iconUrl = string(tags(iconTag));
             date = date(tags(dateTag));
             messageText = string(tags(messageTextTag));
+            favorite = Boolean(tags(isFavorite));
         }};
         
         {
             setEntityType(TYPE);
+            isFavorite(false);
+            isOwn(true);
         }
         
         public ViewModel postedBy(String username) {
             set(postedBy, username);
+            isOwn(username == null || username.length() == 0);
             return this;
         }
         
@@ -446,6 +523,11 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             return this;
         }
         
+        public ViewModel isFavorite(boolean o) {
+            set(favorite, o);
+            return this;
+        }
+        
         public String getPostedBy() {
             return get(postedBy);
         }
@@ -460,6 +542,10 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         
         public Boolean isOwn() {
             return get(own);
+        }
+        
+        public Boolean isFavorite() {
+            return get(favorite);
         }
         
         public String getMessageText() {
