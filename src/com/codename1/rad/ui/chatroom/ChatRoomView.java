@@ -8,7 +8,6 @@ package com.codename1.rad.ui.chatroom;
 import com.codename1.rad.ui.AbstractEntityView;
 import com.codename1.rad.ui.ActionStyle;
 import com.codename1.rad.ui.Actions;
-import com.codename1.rad.ui.DefaultActionViewFactory;
 import com.codename1.rad.ui.EntityEditor;
 import com.codename1.rad.ui.EntityView;
 import com.codename1.rad.ui.EntityViewFactory;
@@ -16,13 +15,11 @@ import com.codename1.rad.ui.NodeList;
 import com.codename1.rad.ui.UI;
 import com.codename1.rad.nodes.ActionNode;
 import com.codename1.rad.nodes.ActionNode.Category;
-import com.codename1.rad.nodes.ActionViewFactoryNode;
 import com.codename1.rad.nodes.FieldNode;
 import com.codename1.rad.nodes.ListNode;
 import com.codename1.rad.nodes.Node;
 import com.codename1.rad.nodes.ViewNode;
 import com.codename1.rad.propertyviews.TextAreaPropertyView;
-import com.codename1.rad.propertyviews.TextFieldPropertyView;
 import com.codename1.rad.models.Entity;
 import com.codename1.rad.models.EntityList;
 import com.codename1.rad.models.EntityType;
@@ -33,26 +30,30 @@ import com.codename1.rad.models.Tag;
 import com.codename1.rad.models.Tags;
 import com.codename1.rad.schemas.ChatRoom;
 import com.codename1.rad.schemas.Comment;
+import com.codename1.rad.ui.entityviews.ProfileAvatarView;
+import com.codename1.rad.ui.entityviews.ProfileAvatarsTitleComponent;
 import com.codename1.rad.ui.entityviews.EntityListView;
+import com.codename1.ui.CN;
 import static com.codename1.ui.CN.SOUTH;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
+import com.codename1.ui.Label;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.TextField;
-import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
-import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * A view that provides a fully-functional user interface for a multi-user chat.
  * @author shannah
  */
 public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
     
-    public static final Category CHAT_ENTRY_ACTIONS = new Category();
+    public static final Category TEXT_ACTIONS = new Category();
     private Node node;
     private ListNode listNode;
     private Property messagesProp, participantsProp, textBufferProp;
@@ -60,6 +61,8 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
     private Container wrapper = new Container(new BorderLayout());
     private TextArea entryField = new TextField();
     private TextAreaPropertyView entryFieldBinding;
+    
+    private Form form;
     
     /**
      * Category used to register an action to be fired when the user hits "send".
@@ -71,23 +74,23 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
      * text input field.  This is an appropriate place to add capabilities like
      * taking a photo.
      */
-    public static final Category TEXT_ACTIONS = new Category();
+    //public static final Category TEXT_ACTIONS = new Category();
     
     /**
      * Creates a chat room with the settings specified by the given node.  This will create
      * a new view model of type {@link ViewModel}.
      * @param node UI node descriptor.  This node can be used to add actions to the chat room.
      */
-    public ChatRoomView(Node node) {
-        this((T)new ViewModel(), node);
+    public ChatRoomView(Node node, Form form) {
+        this((T)new ViewModel(), node, form);
     }
     
     /**
      * Creates a chat room view with a default view model of type {@link ViewModel}, and an empty
      * Node with no actions.
      */
-    public ChatRoomView() {
-        this((T)new ViewModel());
+    public ChatRoomView(Form form) {
+        this((T)new ViewModel(), form);
     }
     
     /**
@@ -97,8 +100,8 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
      * for a view model.
      * @param entity 
      */
-    public ChatRoomView(T entity) {
-        this(entity, createNode());
+    public ChatRoomView(T entity, Form form) {
+        this(entity, createNode(), form);
     }
     
     private static Node createNode() {
@@ -122,7 +125,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
      * for a view model.
      * @param node The Node used as the UI descriptor for the chat room.  Set things like actions on this node.
      */
-    public ChatRoomView(T entity, Node node) {
+    public ChatRoomView(T entity, Node node, Form form) {
         super(entity);
         if (node == null) {
             node = createNode();
@@ -155,13 +158,22 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         actualRowsInTextEditor = entryField.getActualRows();
         entryField.setSingleLineTextArea(false);
         entryField.setMaxSize(99999999);
+        String singleRowUiid = "ChatMessageTextArea";
         
-        entryField.setUIID("ChatMessageTextArea");
+        String uuidSuffix = CN.isDesktop() ? "Desktop" : "";
+        String multilineSuffix = "MultiLine";
+        entryField.setUIID("ChatMessageTextArea" + uuidSuffix);
         entryFieldBinding = new TextAreaPropertyView(entryField, getEntity(), fn);
         
         entryField.addDataChangedListener((o,i)->{
             if (actualRowsInTextEditor != entryField.getActualRows()) {
                 actualRowsInTextEditor = entryField.getActualRows();
+                if (actualRowsInTextEditor == 1) {
+                    entryField.setUIID(singleRowUiid + uuidSuffix);
+                } else {
+                    System.out.println("UIID now "+singleRowUiid + uuidSuffix + multilineSuffix);
+                    entryField.setUIID(singleRowUiid + uuidSuffix + multilineSuffix);
+                }
                 Form f = getComponentForm();
                 if (f != null) {
                     f.revalidateWithAnimationSafety();
@@ -169,18 +181,29 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
             }
         });
         ActionNode te = node.getAction(SEND_ACTION);
-        entryField.setDoneListener(evt->{
-            
-            System.out.println("Received message.");
-            
-            if (te != null) {
-                Map extra = new HashMap();
-                extra.put(SEND_ACTION, entryField.getText());
-                System.out.println("Firing event");
-                te.fireEvent(entity, this, extra);
-                
-            }
-        });
+        if (CN.isDesktop()) {
+            // We only set a done listener on the desktop because on mobile there is no
+            // way to properly have an enter button in the VKB AND have a submit/done button.
+            entryField.setDoneListener(evt->{
+
+                System.out.println("Received message.");
+
+                if (te != null) {
+                    Map extra = new HashMap();
+                    extra.put(SEND_ACTION, entryField.getText());
+                    System.out.println("Firing event");
+                    te.fireEvent(entity, this, extra);
+
+                }
+            });
+        }
+        
+        Component sendActionCmp = null;
+        if (te != null) {
+            sendActionCmp = te.createView(getEntity());
+        }
+        
+        
         
         messagesProp = et != null ? et.findProperty(ChatRoom.messages) : null;
         if (messagesProp == null) {
@@ -223,30 +246,53 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         
         wrapper.add(CENTER, messagesList);
         
-        Actions chatEntryActions = node.getActions(CHAT_ENTRY_ACTIONS);
+        
+        
+        Actions chatEntryActions = node.getActions(TEXT_ACTIONS);
         if (!chatEntryActions.isEmpty()) {
             Container cnt = new Container(new GridLayout(chatEntryActions.size()));
             for (ActionNode action : chatEntryActions) {
                 action = (ActionNode)action.createProxy(node);
                 action.setAttributes(UI.actionStyle(ActionStyle.IconOnly));
-                ActionViewFactoryNode viewFactory = action.getViewFactory();
-                if (viewFactory == null) {
-                    viewFactory = new ActionViewFactoryNode(new DefaultActionViewFactory());
-                }
-                cnt.add(viewFactory.getValue().createActionView(entity, action));
+                
+                cnt.add(action.createView(entity));
             }
-            Container south = BorderLayout.centerEastWest(entryFieldBinding, null, cnt);
+            Container south = BorderLayout.centerEastWest(entryFieldBinding, sendActionCmp, cnt);
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
             
         } else {
-            Container south = BorderLayout.centerEastWest(entryFieldBinding, null, null);
+            Container south = BorderLayout.centerEastWest(entryFieldBinding, sendActionCmp, null);
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
         }
         
         add(CENTER, wrapper);
         
+        if (form != null) {
+            form.setFormBottomPaddingEditingMode(true);
+            if (participantsProp != null && participantsProp.getContentType().isEntityList()) {
+                EntityList participantsList = (EntityList)entity.get(participantsProp);
+                ViewNode participantsListNode = new ViewNode();
+                
+                participantsListNode.setParent(node);
+                float sizeMM = 5;
+                if (CN.isDesktop()) {
+                    sizeMM *= 2;
+                }
+                ProfileAvatarsTitleComponent titleComponent = new ProfileAvatarsTitleComponent(participantsList, participantsListNode, sizeMM);
+                
+                Toolbar toolbar = form.getToolbar();
+                if (toolbar != null) {
+                    toolbar.setTitleComponent(titleComponent);
+                } else {
+                    Label oldTitleComponent = form.getTitleComponent();
+                    Container titleArea = form.getTitleComponent().getParent();
+                    titleArea.replace(oldTitleComponent, titleComponent, null);
+                }
+                //form.getTitleComponent().getParent().replace(form.getTitleComponent(), titleComponent, null);
+            }
+        }
         
        
         
@@ -284,7 +330,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
 
         @Override
         public EntityView createView(Entity entity, ViewNode node) {
-            return new ChatRoomView(entity, node);
+            return new ChatRoomView(entity, node, null);
         }
         
     }
