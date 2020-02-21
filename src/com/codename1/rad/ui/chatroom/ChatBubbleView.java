@@ -5,7 +5,6 @@
  */
 package com.codename1.rad.ui.chatroom;
 
-import ca.weblite.shared.components.ComponentImage;
 import com.codename1.rad.ui.AbstractEntityView;
 import com.codename1.rad.ui.Actions;
 import com.codename1.rad.ui.DefaultEntityListCellRenderer;
@@ -32,25 +31,22 @@ import com.codename1.rad.schemas.Comment;
 import com.codename1.rad.schemas.ListRowItem;
 import com.codename1.rad.schemas.Thing;
 import com.codename1.rad.text.LocalDateTimeShortStyleFormatter;
-import com.codename1.components.SpanLabel;
 import com.codename1.io.Log;
 import com.codename1.rad.attributes.UIID;
 import com.codename1.rad.nodes.ActionNode;
 import com.codename1.rad.ui.UI;
+import com.codename1.rad.ui.animations.TypingAnimation;
 import com.codename1.rad.ui.entityviews.ProfileAvatarView;
 import com.codename1.rad.ui.entityviews.EntityListView;
 import com.codename1.rad.ui.image.EntityImageRenderer;
-import com.codename1.ui.Button;
 import com.codename1.ui.CN;
 import static com.codename1.ui.CN.NORTH;
 import static com.codename1.ui.CN.WEST;
 import com.codename1.ui.Component;
 import static com.codename1.ui.ComponentSelector.$;
 import com.codename1.ui.Container;
-import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import com.codename1.ui.events.ActionEvent;
-import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -63,6 +59,44 @@ import java.util.Objects;
 /**
  * A view for a single row/chat bubble in a Chat view.  This view is used to render rows for the {@link ChatRoomView}
  * view.
+ * 
+ * <h3>View Model Requirements</h3>
+ * 
+ * <p>See {@link ViewModel} for a reference view model for use in this view.  However, you don't need to use this class.  Any 
+ * entity that implements the required properties will do.</p>
+ * 
+ * <p><strong>Properties:</strong></p>
+ * 
+ * <ul>
+ *  <li><strong>{@link ChatMessage#text}</strong> - Required.  The text to appear in the chat bubble.</li>
+ *  <li><strong>{@link ChatMessage#creator}</strong> - Optional.  The name of the person who sent the chat message.</li>
+ *  <li><strong>{@link ChatMessage#thumbnailUrl}</strong> or {@link ListRowItem#icon} - Optional.  The icon or URL to 
+ *     the user's avatar who posted the message.
+ *  </li>
+ *  <li><strong>{@link ChatMessage#datePublished}</strong> - Optional. The date-time the message was posted.</li>
+ *  <li><strong>{@link ChatMessage#isOwnMessage}</strong> - Optional.  Boolean flag indicating that the message was posted by the current user.  
+ *      If this isn't present, it will use an empty {@link ChatMessage#creator} field to imply "true" on this field.
+ * </li>
+ * 
+ * </ul>
+ * 
+ * <h3>Supported Actions</h3>
+ * 
+ * <p>This view supports the following actions:</p>
+ * 
+ * <ul>
+ *  <li>{@link #CHAT_BUBBLE_CLICKED}</li>
+ *  <li>{@link #CHAT_BUBBLE_LONG_PRESS}</li>
+ *  <li>{@link #CHAT_BUBBLE_CLICKED_MENU}</li>
+ *  <li>{@link #CHAT_BUBBLE_LONG_PRESS_MENU}</li>
+ *  <li>{@link #CHAT_BUBBLE_BADGES}</li>
+ * </ul>
+ * 
+ * <p>In addition to these actions, the poster's "icon" or thumbnail URL is rendered by the {@link ProfileAvatarView} view
+ * which supports several actions as well.  Actions defined on this chat bubble's view node will be accessible to the 
+ * embedded {@link ProfileAvatarView}.</p>
+ * 
+ * 
  * @author shannah
  */
 public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
@@ -71,11 +105,21 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
      * Actions displayed in popup menu when user long presses a chat bubble.
      */
     public static final Category CHAT_BUBBLE_LONG_PRESS_MENU = new Category();
+    
+    /**
+     * Actions displayed in popup menu when user clicks chat bubble.
+     */
     public static final Category CHAT_BUBBLE_CLICKED_MENU = new Category();
     
+    /**
+     * Action fired when user clicks chat bubble.
+     */
     public static final Category CHAT_BUBBLE_CLICKED = new Category();
-    public static final Category CHAT_BUBBLE_LONG_PRESS = new Category();
     
+    /**
+     * Action fired when user longpresses chat bubble.
+     */
+    public static final Category CHAT_BUBBLE_LONG_PRESS = new Category();
     
     /**
      * Actions displayed as "badges" of a chat bubble.
@@ -90,12 +134,19 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
     private SpanButton text = new SpanButton();
     private Label date = new Label(), iconLabel = new Label(), postedByLabel = new Label();
     private ProfileAvatarView avatar;
-    private Property textProp, postedByProp, iconProp, dateProp, isOwnProp;
+    private Property textProp, postedByProp, iconProp, dateProp, isOwnProp, typingInProgress;
     private RoundRectBorder bubbleBorder;
     private boolean isOwnMessage;
     private Container wrapper = new Container(new BorderLayout());
     
-    
+    /**
+     * Creates a new chat bubble view for the given entity.
+     * @param entity The view model.  See {@link ViewModel} for a reference view model, but custom classes will work fine.  The view expects properties with tags {@link ChatMessage#text},
+     * {@link ListRowItem#icon} (or {@link ChatMessage#thumbnailUrl}, {@link ChatMessage#datePublished}, {@link ChatMessage#isOwnMessage}, {@link ChatMessage#typingInProgress},
+     * and {@link ChatMessage#creator}.  However, if a property is missing, it will generally fall-back sensibly, just omitting that information.  The only critical
+     * property is {@link ChatMessage#text} which is used as the text of the chat bubble.
+     * @param viewNode The view descriptor. Used to pass view parameters, actions, and other view settings.
+     */
     public ChatBubbleView(T entity, Node viewNode) {
         super(entity);
         this.viewNode = viewNode;
@@ -109,7 +160,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         iconProp = entity.findProperty(icon, Comment.thumbnailUrl);
         
         dateProp = entity.findProperty(Comment.datePublished, Comment.dateCreated, Comment.dateModified);
-        
+        typingInProgress = entity.findProperty(ChatMessage.typingInProgress);
         isOwnProp = entity.findProperty(ChatMessage.isOwnMessage);
         postedByLabel.setUIID("ChatBubblePostedBy");
         date.setUIID("ChatBubbleDate");
@@ -171,13 +222,17 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
     }
 
     
-    
+    private boolean lastTypingInProgress;
     
     
     @Override
     public void update() {
         boolean changed = false;
         
+        if (typingInProgress != null && getEntity().getBoolean(typingInProgress) != lastTypingInProgress) {
+            lastTypingInProgress = getEntity().getBoolean(typingInProgress);
+            changed = true;
+        }
         
         String newText = getEntity().getEntityType().getText(textProp, getEntity());
         if (!Objects.equals(newText, text.getText())) {
@@ -309,6 +364,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 border.trackComponentVerticalPosition(1f);
                 bubbleBorder = border;
                 
+                //
                 text.setUIID("ChatBubbleSpanLabelOwn");
                 text.setTextUIID("ChatBubbleTextOwn" + uuidSuffix);
                 $(text).selectAllStyles().setBorder(border);
@@ -391,6 +447,10 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 
                 center.add(FlowLayout.encloseIn(right));
                 
+                if (typingInProgress != null && getEntity().getBoolean(typingInProgress)) {
+                    text.setIcon(new TypingAnimation().toImage());
+                }
+                
                 wrapper.add(WEST, BoxLayout.encloseYBottom(avatar == null ? iconLabel : avatar));
             }
             wrapper.add(CENTER, center);
@@ -458,6 +518,9 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         return viewNode;
     }
     
+    /**
+     * A list cell renderer for creating a row of {@link ChatBubbleView} inside an {@link EntityListView}.
+     */
     public static class ChatBubbleListCellRenderer extends DefaultEntityListCellRenderer {
         //private DateUtil dateUtil = new DateUtil();
         @Override
@@ -543,9 +606,15 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
          * 
          * <p>If the view model entity does not contain a property with this tag, then it will
          * be inferred by the ChatBubbleView based on whether the "postedBy" property is empty.</p>
+         * 
+         * @see ChatMessage#isOwnMessage
          */
         public static final Tag isOwnTag = ChatMessage.isOwnMessage;
         
+        /**
+         * Tag used for boolean property which marks a chat message as a "favourite".
+         * @see ChatMessage#isFavorite
+         */
         public static final Tag isFavorite = ChatMessage.isFavorite;
         
         /**
@@ -553,6 +622,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
          * type that can be converted to an {@link AsyncImage}.  This includes a string (with a URL,
          * fiile path, resource path, or storage key), or any other content type that can convert
          * to AsyncImage.
+         * @see Comment#thumbnailUrl
          */
         public static final Tag iconTag = Comment.thumbnailUrl;
         
@@ -560,17 +630,27 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
          * Tag used for the 'posted by' property of a chat message.  This reference implementation
          * uses a String property for this, but you could just as well use an Entity content type
          * to store an actual entity of a user.
+         * @see Comment#creator
          */
         public static final Tag postedByTag = Comment.creator;
         
         /**
          * Tag used for the message text property of a chat message.  This is the only *required*
          * tag for an entity to be usable as a model for a ChatBubbleView.
+         * 
+         * @see Comment#text
          */
         public static final Tag messageTextTag = Comment.text;
         
+        /**
+         * Tag used for boolean property that indicates typing is still in progress for a chat message.
+         * 
+         * @see ChatMessage#typingInProgress
+         */
+        public static final Tag typingInProgressTag = ChatMessage.typingInProgress;
+        
         public static StringProperty postedBy, iconUrl, messageText;
-        public static BooleanProperty own, favorite;
+        public static BooleanProperty own, favorite, typingInProgress;
         public static DateProperty date;
         private static final EntityType TYPE = new EntityType(){{
             postedBy = string(tags(postedByTag));
@@ -579,12 +659,14 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             date = date(tags(dateTag));
             messageText = string(tags(messageTextTag));
             favorite = Boolean(tags(isFavorite));
+            typingInProgress = Boolean(tags(typingInProgressTag));
         }};
         
         {
             setEntityType(TYPE);
             isFavorite(false);
             isOwn(true);
+            typingInProgress(false);
         }
         
         public ViewModel postedBy(String username) {
@@ -615,6 +697,15 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         
         public ViewModel isFavorite(boolean o) {
             set(favorite, o);
+            return this;
+        }
+        
+        public Boolean isTypingInProgress() {
+            return get(typingInProgress);
+        }
+        
+        public ViewModel typingInProgress(boolean inProgress) {
+            set(typingInProgress, inProgress);
             return this;
         }
         
