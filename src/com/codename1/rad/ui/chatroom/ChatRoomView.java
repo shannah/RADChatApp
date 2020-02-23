@@ -43,6 +43,7 @@ import com.codename1.ui.TextArea;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,13 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
     private Property messagesProp, participantsProp, textBufferProp;
     private EntityList messagesEntity;
     private Container wrapper = new Container(new BorderLayout());
-    private TextArea entryField = new TextField();
+    private TextArea entryField = new TextField() {
+        @Override
+        public int getBottomGap() {
+            return 0;
+        }
+        
+    };
     private TextAreaPropertyView entryFieldBinding;
     
     private Form form;
@@ -153,6 +160,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         if (textBufferProp == null) {
             throw new IllegalArgumentException("ChatRoomView view model requires a property with tag ChatRoom.inputBuffer that is missing");
         }
+        entryField.setScrollVisible(false);
         entryField.setGrowByContent(true);
         entryField.setRows(1);
         actualRowsInTextEditor = entryField.getActualRows();
@@ -242,8 +250,8 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         listNode.setAttributes(UI.cellRenderer(new ChatBubbleView.ChatBubbleListCellRenderer()));
         
         EntityEditor messagesList = new EntityEditor(messagesEntity, listNode);
-        
-        
+        messagesList.setSafeArea(true);
+        messagesList.setUIID("ChatRoomViewMessagesList");
         wrapper.add(CENTER, messagesList);
         
         
@@ -257,12 +265,16 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
                 
                 cnt.add(action.createView(entity));
             }
-            Container south = BorderLayout.centerEastWest(entryFieldBinding, sendActionCmp, cnt);
+            Container south = BorderLayout.centerEastWest(BoxLayout.encloseYCenter(entryFieldBinding), sendActionCmp, cnt);
+            south.setUIID("ChatRoomViewSouth");
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
             
         } else {
-            Container south = BorderLayout.centerEastWest(entryFieldBinding, sendActionCmp, null);
+            
+            
+            
+            Container south = BorderLayout.centerEastWest(BoxLayout.encloseYCenter(entryFieldBinding), sendActionCmp, null);
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
         }
@@ -271,7 +283,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         
         if (form != null) {
             form.setFormBottomPaddingEditingMode(true);
-            if (participantsProp != null && participantsProp.getContentType().isEntityList()) {
+            if (participantsProp != null && participantsProp.getContentType().isEntityList() && !getEntity().isEmpty(participantsProp)) {
                 EntityList participantsList = (EntityList)entity.get(participantsProp);
                 ViewNode participantsListNode = new ViewNode();
                 

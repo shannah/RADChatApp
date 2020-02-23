@@ -5,6 +5,7 @@
  */
 package com.codename1.rad.ui.chatroom;
 
+import ca.weblite.shared.components.ComponentImage;
 import com.codename1.rad.ui.AbstractEntityView;
 import com.codename1.rad.ui.Actions;
 import com.codename1.rad.ui.DefaultEntityListCellRenderer;
@@ -17,6 +18,7 @@ import com.codename1.rad.nodes.ListNode;
 import com.codename1.rad.nodes.Node;
 import com.codename1.rad.nodes.ViewNode;
 import ca.weblite.shared.components.OverflowContainer;
+import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanButton;
 import com.codename1.rad.models.BooleanProperty;
 import com.codename1.rad.models.DateProperty;
@@ -45,13 +47,16 @@ import static com.codename1.ui.CN.WEST;
 import com.codename1.ui.Component;
 import static com.codename1.ui.ComponentSelector.$;
 import com.codename1.ui.Container;
+import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.RoundRectBorder;
 import java.util.Date;
 import java.util.Objects;
@@ -129,12 +134,12 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
     
     private boolean hideDate;
     private Node viewNode;
-    public static final Tag TEXT = Comment.text;
+    public static final Tag TEXT = ChatMessage.text;
     public static final Tag icon = ListRowItem.icon;
     private SpanButton text = new SpanButton();
     private Label date = new Label(), iconLabel = new Label(), postedByLabel = new Label();
     private ProfileAvatarView avatar;
-    private Property textProp, postedByProp, iconProp, dateProp, isOwnProp, typingInProgress;
+    private Property textProp, postedByProp, iconProp, dateProp, isOwnProp, typingInProgress, attachment, attachmentPlaceholder;
     private RoundRectBorder bubbleBorder;
     private boolean isOwnMessage;
     private Container wrapper = new Container(new BorderLayout());
@@ -162,8 +167,11 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         dateProp = entity.findProperty(Comment.datePublished, Comment.dateCreated, Comment.dateModified);
         typingInProgress = entity.findProperty(ChatMessage.typingInProgress);
         isOwnProp = entity.findProperty(ChatMessage.isOwnMessage);
+        attachment = entity.findProperty(ChatMessage.attachment);
+        attachmentPlaceholder = entity.findProperty(ChatMessage.attachmentPlaceholderImage);
         postedByLabel.setUIID("ChatBubblePostedBy");
         date.setUIID("ChatBubbleDate");
+        text.setIconPosition(BorderLayout.SOUTH);
         text.addActionListener(evt->{
             evt.consume();
             ActionNode action = viewNode.getInheritedAction(CHAT_BUBBLE_CLICKED);
@@ -176,9 +184,9 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             
             Actions menu = viewNode.getInheritedActions(CHAT_BUBBLE_CLICKED_MENU).getEnabled(entity);
             if (!menu.isEmpty()) {
-                PopupActionsMenu p = new PopupActionsMenu(menu, entity, ChatBubbleView.this);
+                PopupActionsMenu p = new PopupActionsMenu(menu, entity, text);
                 p.setCommandsLayout(new GridLayout(1, menu.size()));
-                p.showPopupDialog(ChatBubbleView.this);
+                p.showPopupDialog(text);
                 return;
                 
             }
@@ -196,9 +204,9 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             
             Actions menu = viewNode.getInheritedActions(CHAT_BUBBLE_LONG_PRESS_MENU).getEnabled(entity);
             if (!menu.isEmpty()) {
-                PopupActionsMenu p = new PopupActionsMenu(menu, entity, ChatBubbleView.this);
+                PopupActionsMenu p = new PopupActionsMenu(menu, entity, text);
                 p.setCommandsLayout(new GridLayout(1, menu.size()));
-                p.showPopupDialog(ChatBubbleView.this);
+                p.showPopupDialog(text);
                 return;
                 
             }
@@ -223,7 +231,32 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
 
     
     private boolean lastTypingInProgress;
+    private String lastAttachmentPlaceholderImageURL;
     
+    
+    private ComponentImage createPlaceholderImage(int width, int height) {
+        Label placeholder = new Label();
+        $(placeholder).selectAllStyles()
+                .setBorder(Border.createEmpty())
+                .setBgTransparency(0x0)
+                .setFgColor(0x999999)
+                ;
+
+        placeholder.setMaterialIcon(com.codename1.ui.FontImage.MATERIAL_IMAGE, 10);
+
+        Container placeholderCnt = new Container(new BorderLayout(BorderLayout.CENTER_BEHAVIOR_CENTER_ABSOLUTE));
+        $(placeholderCnt)
+                .setBgTransparency(0x0)
+                .setFgColor(0x999999)
+                .setBorder(RoundRectBorder.create().cornerRadius(1f).strokeColor(0x666666).stroke(25.4f/96f/2f, true))
+
+                ;
+        placeholderCnt.addComponent(BorderLayout.CENTER, placeholder);
+        placeholderCnt.setWidth(width);
+        placeholderCnt.setHeight(height);
+        placeholderCnt.layoutContainer();
+        return new ComponentImage(placeholderCnt, placeholderCnt.getWidth(), placeholderCnt.getHeight());
+    }
     
     @Override
     public void update() {
@@ -231,6 +264,21 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         
         if (typingInProgress != null && getEntity().getBoolean(typingInProgress) != lastTypingInProgress) {
             lastTypingInProgress = getEntity().getBoolean(typingInProgress);
+            changed = true;
+        }
+        if (!getEntity().isFalsey(attachmentPlaceholder) && !Objects.equals(getEntity().getText(attachmentPlaceholder), lastAttachmentPlaceholderImageURL)) {
+            int imSize = Math.min(CN.getDisplayWidth() * 7 / 8 , CN.getDisplayHeight() * 7 / 8);
+            imSize = Math.min(imSize, CN.convertToPixels(35));
+            Image im = getEntity().createImageToStorage(
+                    attachmentPlaceholder, 
+                    createPlaceholderImage(imSize, imSize).toEncodedImage(), 
+                    null, URLImage.RESIZE_SCALE_TO_FILL);
+            text.setIcon(im);
+            lastAttachmentPlaceholderImageURL = getEntity().getText(attachmentPlaceholder);
+            changed = true;
+        } else if (lastAttachmentPlaceholderImageURL != null && !lastAttachmentPlaceholderImageURL.isEmpty() && getEntity().isEmpty(attachmentPlaceholder)) {
+            text.setIcon(null);
+            lastAttachmentPlaceholderImageURL = null;
             changed = true;
         }
         
@@ -649,7 +697,9 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
          */
         public static final Tag typingInProgressTag = ChatMessage.typingInProgress;
         
-        public static StringProperty postedBy, iconUrl, messageText;
+        public static final Tag attachmentPlaceholder = ChatMessage.attachmentPlaceholderImage;
+        
+        public static StringProperty postedBy, iconUrl, messageText, attachmentImageUrl;
         public static BooleanProperty own, favorite, typingInProgress;
         public static DateProperty date;
         private static final EntityType TYPE = new EntityType(){{
@@ -660,6 +710,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             messageText = string(tags(messageTextTag));
             favorite = Boolean(tags(isFavorite));
             typingInProgress = Boolean(tags(typingInProgressTag));
+            attachmentImageUrl = string(tags(attachmentPlaceholder));
         }};
         
         {
@@ -709,6 +760,11 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             return this;
         }
         
+        public ViewModel attachmentImageUrl(String imageUrl) {
+            set(attachmentImageUrl, imageUrl);
+            return this;
+        }
+        
         public String getPostedBy() {
             return get(postedBy);
         }
@@ -731,6 +787,10 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         
         public String getMessageText() {
             return get(messageText);
+        }
+        
+        public String getAttachmentImageUrl() {
+            return get(attachmentImageUrl);
         }
     }
     
