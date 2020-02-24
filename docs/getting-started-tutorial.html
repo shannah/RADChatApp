@@ -5,7 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.8.dev">
-<title>How to Build a Chat Room in Codename One</title>
+<meta name="description" content="Learn how to build a chat application with Codename One, and deploy to iOS, Android, Javascript, Desktop, and more.">
+<meta name="keywords" content="Codename One, Mobile development, iOS, Android, Chat, Messaging App">
+<meta name="author" content="Steve Hannah">
+<title>How to Build a Messenging App in Codename One</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,7 +441,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>How to Build a Chat Room in Codename One</h1>
+<h1>How to Build a Messenging App in Codename One</h1>
+<div class="details">
+<span id="author" class="author">Steve Hannah</span><br>
+<span id="email" class="email"><a href="mailto:steve.hannah@codenameone.com">steve.hannah@codenameone.com</a></span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -475,6 +482,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#trueadding-a-photo-capture-feature">Adding A Photo Capture Feature</a></li>
+<li><a href="#truelinking-to-a-back-end-chat-server">Linking to a Back-end Chat Server</a></li>
+<li><a href="#truefurther-reading">Further Reading</a></li>
 </ul>
 </div>
 </div>
@@ -482,7 +491,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This tutorial describes how to use the RADChatRoom library to quickly and easily add a nice-looking, fully functional chat room to your Codename One application.</p>
+<p>This tutorial describes how to use the <a href="https://github.com/shannah/RADChatRoom">RADChatRoom library</a> to quickly and easily add a nice-looking, fully functional chat room to your <a href="https://www.codenameone.com">Codename One</a> application.</p>
 </div>
 <div class="paragraph">
 <p>The finished product will look like the following:</p>
@@ -492,13 +501,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <img src="images/Image-210220-105119.095.png" alt="ChatRoomView screenshot">
 </div>
 </div>
+<div class="paragraph">
+<p>You can download the full source of this tutorial&#8217;s project <a href="https://github.com/shannah/RADChatRoom/CN1Chat">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also try it out yourself <a href="https://shannah.github.io/RADChatRoom/demo">here</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The demo link uses the CodeName One Javascript port, which allows you to deploy Codename One java applications as native Javascript apps inside the browser without any plugins or extensions.  When you build a Codename One project for iOS, Android, Desktop, or any of the other build targets, they will be compiled as native apps, with native performance, and will not use Javascript.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You may also try out an <a href="https://github.com/shannah/RADChatRoom/releases/download/1.0/CN1Chat-debug.apk">Android build</a> of this project.  For other platforms, you can download the sources and build it yourself.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="trueabout-the-chatroomview-component"><a class="anchor" href="#trueabout-the-chatroomview-component"></a>About the ChatRoomView Component</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The ChatRoomView component is the first in a new breed of Codename One UI components which go beyond the the fundamental building blocks of user interfaces to provide a rich, fully-functional user experience out of the box.  It is built on top of the new CodeRAD library which enables a new level of code-reuse based on the tried-and-true MVC (Model-View-Controller) design pattern.  As you&#8217;ll see, adding a chat feature to your app is not difficult.  All of the minutiae of UI details come working and ready to go.  You just need to bind it to your view model and controller.</p>
+<p>The ChatRoomView component is the first in a new breed of Codename One UI components which go beyond the the fundamental building blocks of user interfaces to provide a rich, fully-functional user experience out of the box.  It is built on top of the new <a href="https://github.com/shannah/CodeRAD">CodeRAD</a> library which enables a new level of code-reuse based on the tried-and-true MVC (Model-View-Controller) design pattern.  As you&#8217;ll see, adding a chat feature to your app is not difficult.  All of the minutiae of UI details come working and ready to go.  You just need to bind it to your view model and controller.</p>
 </div>
 </div>
 </div>
@@ -1775,10 +1805,26 @@ ViewNode viewNode = new ViewNode(
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="truelinking-to-a-back-end-chat-server"><a class="anchor" href="#truelinking-to-a-back-end-chat-server"></a>Linking to a Back-end Chat Server</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this tutorial we created a mock chat application in order to demostrate the ChatRoomView, which is a user interface component.  It did not include any integration with a server so it doesn&#8217;t allow you to actually chat with other people.  Linking to a server is not difficult, and the MVC architecture of this example should make it very clear how the integration should occur.  I&#8217;ll leave this integration as an exercise for the reader.  As a starting point, I recommend checking out the <a href="https://github.com/shannah/cn1-websockets">cn1-websockets</a> library, and its chat demo.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="truefurther-reading"><a class="anchor" href="#truefurther-reading"></a>Further Reading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tutorial provides just a small glimpse into the capabilities of Codename One and the CodeRAD library.  To learn more, please see <a href="https://www.codenameone.com" class="bare">https://www.codenameone.com</a>.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-23 13:12:53 -0800
+Last updated 2020-02-24 09:16:56 -0800
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
