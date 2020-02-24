@@ -1,0 +1,55 @@
+CACHE MANIFEST
+# This is a comment.
+# Cache manifest version 1.0.1582552001910
+# If you change the version number in this comment,
+# the cache manifest is no longer byte-for-byte
+# identical.
+# From https://developer.apple.com/library/content/documentation/iPhone/Conceptual/SafariJSDatabaseGuide/OfflineApplicationCache/OfflineApplicationCache.html#//apple_ref/doc/uid/TP40007256-CH7-SW2
+
+CACHE:
+.
+favicon.png?v=1.0.1582552001910
+icon.png?v=1.0.1582552001910
+index.html
+manifest.appcache
+manifest.json?v=1.0.1582552001910
+progress.gif
+style.css?v=1.0.1582552001910
+icon.png?v=1.0.1582552001910
+js/bootstrap.min.js?v=1.0.1582552001910
+js/fontmetrics.js?v=1.0.1582552001910
+js/jquery.min.js?v=1.0.1582552001910
+js/manup.js?v=1.0.1582552001910
+js/push.js?v=1.0.1582552001910
+js/upup.min.js?v=1.0.1582552001910
+css/bootstrap-theme.min.css?v=1.0.1582552001910
+css/bootstrap.min.css?v=1.0.1582552001910
+sw.js
+teavm/classes.js?v=1.0.1582552001910
+
+
+assets/android_holo_light.res?v=1.0.1582552001910
+assets/cn1-version-numbers?v=1.0.1582552001910
+assets/CN1Resource.res?v=1.0.1582552001910
+assets/iOS7Theme.res?v=1.0.1582552001910
+assets/material-design-font.ttf?v=1.0.1582552001910
+assets/theme.res?v=1.0.1582552001910
+_icons/tiny.png
+_icons/square.png
+favicon.png?v=1.0.1582552001910
+icon.png?v=1.0.1582552001910
+_icons/square144.png
+_icons/widelogo.310x150.png
+_icons/apple-touch-icon-72x72-precomposed.png
+_icons/apple-touch-icon-57x57-precomposed.png
+_icons/apple-touch-icon-76x76-precomposed.png
+_icons/apple-touch-icon-60x60-precomposed.png
+_icons/apple-touch-icon-120x120-precomposed.png
+_icons/apple-touch-icon-152x152-precomposed.png
+_icons/apple-touch-icon-114x114-precomposed.png
+_icons/icon-512x512.png
+_icons/nice-highres.png
+_icons/niceicon.png
+
+NETWORK:
+*
