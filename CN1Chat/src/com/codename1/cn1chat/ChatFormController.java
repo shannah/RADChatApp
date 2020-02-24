@@ -204,6 +204,10 @@ public class ChatFormController extends FormController {
         t += MINUTE;
         room.addMessages(createDemoMessage("Hey", new Date(t), null,  null));
         
+        Entity vm = createDemoMessage("Hey ya want these? I don't want em!", new Date(t), "Kramer", kramerThumb);
+        vm.setText(ChatMessage.attachmentPlaceholderImage, "https://weblite.ca/cn1tests/radchat/golf-clubs.jpg");
+        room.addMessages(vm);
+        
         room.addParticipants(
                 new ChatAccount("George", georgeThumb, "712-555-1234"), 
                 new ChatAccount("Kramer", kramerThumb, null)

@@ -335,7 +335,7 @@
             vendor="${codename1.vendor}"
             subtitle="${codename1.secondaryTitle}"
             
-            targetType="android"
+            targetType="debug_android_steve"
             keystoreAlias="${codename1.android.keystoreAlias}"
             keystore="${codename1.android.keystore}"
             certPassword="${codename1.android.keystorePassword}"
@@ -354,7 +354,7 @@
             vendor="${codename1.vendor}"
             subtitle="${codename1.secondaryTitle}"
             
-            targetType="javascript"
+            targetType="debug_javascript_steve"
             automated="${automated}"
             />
     </target>    
@@ -613,6 +613,23 @@
             <arg file="css/theme.css"/>
             <arg file="src/theme.res"/>
         </java>
+    </target>
+    
+    <target name="add-cn1libs" description="Add the CN1libs to the project">
+        <!-- While developing we just reference the CodeRAD and RADChatRoom projects directly.  But when building for device
+                we need to use the cn1libs. Run this before building for device,
+                and remember to comment ouf the project dependencies from nbproject/project.properties. -->
+        <copy file="../dist/RADChatRoom.cn1lib" tofile="lib/RADChatRoom.cn1lib"/>
+        <copy file="../../CodeRAD/dist/CodeRAD.cn1lib" tofile="lib/CodeRAD.cn1lib"/>
+        <antcall target="refresh-libs-impl"/>
+    </target>
+    <target name="remove-cn1libs" description="Remove CN1libs from the project">
+        <!-- Remove CodeRAD and RADChatRoom cn1libs from libs directory so that we can develop using
+                the project references directly.  Remember to uncomment the project dependencies
+                        in the classpath in nbproject/project.properties -->
+        <delete file="lib/RADChatRoom.cn1lib"/>
+        <delete file="lib/CodeRAD.cn1lib"/>
+        <antcall target="refresh-libs-impl"/>
     </target>
 
     <target name="pre-javadoc">

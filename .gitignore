@@ -5,3 +5,4 @@ build
 dist
 lib/CodenameOne_SRC.zip
 nbproject/build-impl.xml~
+CN1Chat/lib/impl/

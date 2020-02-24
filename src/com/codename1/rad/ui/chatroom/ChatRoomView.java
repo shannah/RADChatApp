@@ -36,6 +36,7 @@ import com.codename1.rad.ui.entityviews.EntityListView;
 import com.codename1.ui.CN;
 import static com.codename1.ui.CN.SOUTH;
 import com.codename1.ui.Component;
+import static com.codename1.ui.ComponentSelector.$;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -265,7 +266,10 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
                 
                 cnt.add(action.createView(entity));
             }
-            Container south = BorderLayout.centerEastWest(BoxLayout.encloseYCenter(entryFieldBinding), sendActionCmp, cnt);
+            Container fieldWrap = BoxLayout.encloseYCenter(entryFieldBinding);
+            
+            Container south = BorderLayout.centerEastWest(fieldWrap, sendActionCmp, cnt);
+            $(south, fieldWrap, cnt).setPadding(0).setMargin(0);
             south.setUIID("ChatRoomViewSouth");
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
@@ -273,8 +277,9 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         } else {
             
             
-            
+            Container fieldWrap = BoxLayout.encloseYCenter(entryFieldBinding);
             Container south = BorderLayout.centerEastWest(BoxLayout.encloseYCenter(entryFieldBinding), sendActionCmp, null);
+            $(south, fieldWrap).setPadding(0).setMargin(0);
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
         }
