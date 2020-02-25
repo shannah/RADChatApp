@@ -78,7 +78,7 @@ public class ChatFormController extends FormController {
     
     public static final ActionNode capturePhoto = action(
             icon(FontImage.MATERIAL_CAMERA)
-    );
+    );D
     
     public ChatFormController(Controller parent) {
         super(parent);

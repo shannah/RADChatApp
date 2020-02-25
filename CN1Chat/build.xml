@@ -635,5 +635,19 @@
     <target name="pre-javadoc">
         <property value="JavaSE.jar:lib/CLDC11.jar:lib/lib/impl/cls" name="javac.classpath"/>        
     </target>
-    <target depends="pre-javadoc,init,-javadoc-build,-javadoc-browse" description="Build Javadoc." name="javadoc"/>
+    <target  description="Build Javadoc." name="javadoc">
+        
+
+        <javadoc destdir="dist/javadoc"
+         sourcepath="src"
+         overview="src/overview.adoc">
+        <doclet name="org.asciidoctor.Asciidoclet" path="../lib/asciidoclet-1.5.7-SNAPSHOT-shaded.jar">
+          <param name="--base-dir" value="${basedir}"/>
+          <param name="--attribute" value="name=${ant.project.name}"/>
+          <param name="--attribute" value="version=${version}"/>
+          <param name="--attribute" value="title-link=http://example.com[${ant.project.name} ${version}]"/>
+        </doclet>
+      </javadoc>
+    </target>
+    
 </project>
