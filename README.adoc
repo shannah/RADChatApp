@@ -1,0 +1,53 @@
+= RADChatRoom
+
+A full-featured Chat Room UI Component for https://www.codenameone.com/[Codename One]
+
+image::https://shannah.github.io/RADChatRoom/images/Image-210220-105119.095.png[width=480]
+
+This component designed as a proof of concept for the https://github.com/shannah/CodeRAD[CodeRAD library], which facilitates the development of rich, reusable UI components for Codename One.  It contains everything you should need to incorporate chat into your mobile app.
+
+== License
+
+Apache 2.0
+
+== Features
+
+. Provides nice Chat room view out of the box.
+. User avatar support
+. Use provided view models or bind to your own view models.
+. Add your own custom actions.
+. Nice UI animations when messages are added or removed, or to indicate other users are typing
+. Add badges (e.g. Like, or Thumbs up) to chat messages
+
+NOTE: This component is only a UI component.  It doesn't connect to any back-end services.  You would need to implement that in your controller.
+
+== Demo
+
+* Try https://shannah.github.io/RADChatRoom/demo[Javascript version] in your browser.
+* Download https://github.com/shannah/RADChatRoom/releases/download/1.0/CN1Chat-debug.apk[Android demo app].
+
+NOTE: These demos aren't connected to any back-end server.  The contain some sample chat messages, and they allow you to post your own messages and images, which are just stored locally.
+
+See how to build this demo in the https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+
+== Documentation
+
+. https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+. https://shannah.github.io/RADChatRoom/javadoc/[Javadoc]
+
+== Requirements 
+
+See https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+
+== Installation
+
+See https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+
+== Further Reading
+
+. https://www.codenameone.com/[Codename One]
+. https://github.com/shannah/CodeRAD[CodeRAD library]
+
+== Credits
+
+. Created by https://sjhannah.com[Steve Hannah],  https://www.codenameone.com[Codename One]
