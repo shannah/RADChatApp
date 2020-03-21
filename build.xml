@@ -70,6 +70,7 @@
          executable="/Library/Java/JavaVirtualMachines/zulu8.40.0.25-ca-fx-jdk8.0.222-macosx_x64/bin/javadoc"
          sourcepath="src"
          overview="src/overview.adoc">
+             <link href="https://shannah.github.io/CodeRAD/javadoc/" offline="true" packagelistLoc="javadoc-dependencies/com.codename1.rad"/>
         <doclet name="org.asciidoctor.Asciidoclet" path="lib/asciidoclet-1.5.7-SNAPSHOT-shaded.jar">
           <param name="--base-dir" value="${basedir}"/>
           <param name="--attribute" value="name=${ant.project.name}"/>
