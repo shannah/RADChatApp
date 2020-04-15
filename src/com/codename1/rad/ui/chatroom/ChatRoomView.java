@@ -278,7 +278,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
             
             
             Container fieldWrap = BoxLayout.encloseYCenter(entryFieldBinding);
-            Container south = BorderLayout.centerEastWest(BoxLayout.encloseYCenter(entryFieldBinding), sendActionCmp, null);
+            Container south = BorderLayout.centerEastWest(BoxLayout.encloseYCenter(fieldWrap), sendActionCmp, null);
             $(south, fieldWrap).setPadding(0).setMargin(0);
             south.setSafeArea(true);
             wrapper.add(SOUTH, south);
