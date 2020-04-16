@@ -101,6 +101,8 @@
         <antcall target="buildCSS" />       
         <mkdir dir="dist" />
         <zip basedir="build/lib" compress="true" destfile="dist/${application.title}.cn1lib" />
+        <copy file="dist/${application.title}.cn1lib" todir="CN1Chat/lib"/>
+        <ant dir="CN1Chat" target="refresh-libs-impl" useNativeBaseDir="true"/>
     </target>
 
     <target name="buildNativeRIM">

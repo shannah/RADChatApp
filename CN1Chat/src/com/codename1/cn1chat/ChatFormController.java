@@ -120,6 +120,8 @@ public class ChatFormController extends FormController {
         });
         
         addActionListener(phone, evt->{
+            System.out.println("Event class "+evt.getEntity().getClass());
+            System.out.println("Msg text was "+evt.getEntity().getText(ChatMessage.text));
             evt.consume();
             if (!CN.canDial()) {
                 Dialog.show("Not supported", "Phone calls not supported on this device", "OK", null);

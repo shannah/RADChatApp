@@ -1,0 +1,11 @@
+= RADChatRoom Cookbook
+Steve Hannah
+:doctype: book
+:encoding: utf-8
+:lang: en
+:toc: left
+:numbered:
+
+Recipes for using the RADChatRoom component and customizing it to suit your needs.
+
+include::custom-chat-bubbles.adoc[]

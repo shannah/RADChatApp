@@ -34,6 +34,7 @@ See how to build this demo in the https://shannah.github.io/RADChatRoom/getting-
 
 . https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
 . https://shannah.github.io/RADChatRoom/javadoc/[Javadoc]
+. https://shannah.github.io/RADChatRoom/cookbook[RADChatRoom Cookbook] - A growing list of recipes to show you how to customize the chatroom component.
 
 == Requirements 
 

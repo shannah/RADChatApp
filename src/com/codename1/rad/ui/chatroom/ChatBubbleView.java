@@ -102,6 +102,8 @@ import java.util.Objects;
  * embedded {@link ProfileAvatarView}.</p>
  * 
  * 
+ * 
+ * 
  * @author shannah
  */
 public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
@@ -415,7 +417,10 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 //
                 text.setUIID("ChatBubbleSpanLabelOwn");
                 text.setTextUIID("ChatBubbleTextOwn" + uuidSuffix);
-                $(text).selectAllStyles().setBorder(border);
+                if (text.getStyle().getBorder() == null || text.getStyle().getBorder().isEmptyBorder()) {
+                    $(text).selectAllStyles().setBorder(border);
+                }
+                
                 Component right = text;
                 Actions badges = viewNode.getInheritedActions(CHAT_BUBBLE_BADGES);
                 
@@ -462,7 +467,9 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 bubbleBorder = border;
                 text.setUIID("ChatBubbleSpanLabelOther");
                 text.setTextUIID("ChatBubbleTextOther"+uuidSuffix);
-                $(text).selectAllStyles().setBorder(border);
+                if (text.getStyle().getBorder() == null || text.getStyle().getBorder().isEmptyBorder()) {
+                    $(text).selectAllStyles().setBorder(border);
+                }
                 
                 Component right = text;
                 Actions badges = viewNode.getInheritedActions(CHAT_BUBBLE_BADGES);
