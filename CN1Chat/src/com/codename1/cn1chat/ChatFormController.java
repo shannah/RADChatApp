@@ -188,6 +188,11 @@ public class ChatFormController extends FormController {
      * @return 
      */
     private Entity createViewModel() {
+        String georgeThumb = "https://weblite.ca/cn1tests/radchat/george.jpg";
+        String kramerThumb = "https://weblite.ca/cn1tests/radchat/kramer.jpg";
+        ChatAccount george = new ChatAccount("George", georgeThumb, "712-555-1234");
+        ChatAccount kramer = new ChatAccount("Kramer", kramerThumb, null);
+        
         ChatRoomView.ViewModel room = new ChatRoomView.ViewModel();
         long SECOND = 1000l;
         long MINUTE = SECOND * 60;
@@ -195,37 +200,32 @@ public class ChatFormController extends FormController {
         long DAY = HOUR * 24;
         long t = System.currentTimeMillis() - 2 * DAY;
     
-        String georgeThumb = "https://weblite.ca/cn1tests/radchat/george.jpg";
-        String kramerThumb = "https://weblite.ca/cn1tests/radchat/kramer.jpg";
+        
         
         room.addMessages(createDemoMessage("Why couldn't you have made me an architect? You know I always wanted to pretend that I was an architect. "
                 + "Well I'm supposed to see her tomorrow, I'm gonna tell her what's goin on. Maybe she likes me for me.",
-                new Date(t), "George", georgeThumb));
+                new Date(t), george));
         t += HOUR;
-        room.addMessages(createDemoMessage("Hey", new Date(t), "Kramer", kramerThumb));
+        room.addMessages(createDemoMessage("Hey", new Date(t),kramer));
         t += MINUTE;
-        room.addMessages(createDemoMessage("Hey", new Date(t), null,  null));
+        room.addMessages(createDemoMessage("Hey", new Date(t), null));
         
-        Entity vm = createDemoMessage("Hey ya want these? I don't want em!", new Date(t), "Kramer", kramerThumb);
+        Entity vm = createDemoMessage("Hey ya want these? I don't want em!", new Date(t), kramer);
         vm.setText(ChatMessage.attachmentPlaceholderImage, "https://weblite.ca/cn1tests/radchat/golf-clubs.jpg");
         room.addMessages(vm);
         
-        room.addParticipants(
-                new ChatAccount("George", georgeThumb, "712-555-1234"), 
-                new ChatAccount("Kramer", kramerThumb, null)
-        );
+        room.addParticipants(george, kramer);
+        
         return room;
     }
     
-    private Entity createDemoMessage(String text, Date datePosted, String participant, String iconUrl) {
-        ChatBubbleView.ViewModel msg = new ChatBubbleView.ViewModel();
-        msg.messageText(text)
-                .date(datePosted)
-                .iconUrl(iconUrl)
-                .isOwn(participant == null);
-        if (participant != null) {
-            msg.postedBy(participant);
-        }
+    private Entity createDemoMessage(String text, Date datePosted, ChatAccount participant) {
+        ChatMessageModel msg = new ChatMessageModel();
+        msg.set(ChatMessage.text, text);
+        msg.set(ChatMessage.datePublished, datePosted);
+        msg.set(ChatMessage.creator, participant);
+        msg.set(ChatMessage.isOwnMessage, participant == null);
+        
         return msg;
      
     }

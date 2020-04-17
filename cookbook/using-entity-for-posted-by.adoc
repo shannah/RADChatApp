@@ -1,0 +1,187 @@
+== Using An Entity for The "Posted By" Property of Chat Message
+
+[discrete]
+=== Problem
+
+You want to use an Entity for the `ChatMessage.creator` property in your chat message view model, rather than just incorporating "icon" and "posted by" string properties directly.
+
+[discrete]
+=== Solution
+
+[NOTE]
+====
+The https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial] uses the reference class https://shannah.github.io/RADChatRoom/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.ViewModel.html[ChatBubbleView.ViewModel] as the view model for its chat bubbles. This recipe assumes that you're already using a custom entity class for your Chat message view model.  This class may look something like:
+
+.A sample view model for a ChatMessage.
+[source,java]
+----
+
+package com.codename1.cn1chat;
+
+import com.codename1.rad.models.Entity;
+import com.codename1.rad.models.EntityType;
+import com.codename1.rad.schemas.ChatMessage;
+
+/**
+ * View model for a chat message.
+ * @author shannah
+ */
+public class ChatMessageModel extends Entity {
+    public static final EntityType TYPE = new EntityType(){{
+        string(ChatMessage.text);
+        date(ChatMessage.datePublished);
+        string(ChatMessage.icon); <1>
+        string(ChatMessage.creator); <2>
+        Boolean(ChatMessage.isOwnMessage);
+        string(ChatMessage.attachmentPlaceholderImage);
+    }};
+    {
+        setEntityType(TYPE);
+        
+    }
+    
+}
+
+----
+<1> The avatar for the chat message is stored in the `ChatMessage.icon` tag.
+<2> The name of the user who posted the message is stored in the `ChatMessage.creator` tag.
+
+TIP: We use tags from the https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/ChatMessage.html[ChatMessage schema] for most of the fields in our view model.  This schema is part of the CodeRAD class library.  This schema isn't listed on https://schema.org/[schema.org], it was created to encapsulate chat application messages directly, but it extends the https://schema.org/Comment[Comment schema], which is a standard schema.
+
+====
+
+First, let's change this view model to use an entity for the `creator` instead of a string.  I.e., change:
+
+[source,java]
+----
+string(ChatMessage.icon);
+string(ChatMessage.creator);
+----
+
+to
+
+[source,java]
+----
+entity(ChatAccount.class, ChatMessage.creator);
+----
+
+This says that the "creator" property will be an Entity of type `ChatAccount`.  ChatAccount will be another customer view model class that we'll create next which encapsulates an account in your chat app. 
+[source,java]
+----
+
+package com.codename1.cn1chat;
+import com.codename1.rad.models.Entity;
+import com.codename1.rad.models.EntityType;
+import static com.codename1.rad.models.EntityType.tags;
+import com.codename1.rad.models.StringProperty;
+import com.codename1.rad.schemas.Person;
+import com.codename1.rad.schemas.Thing;
+
+/**
+ * View model for an account profile.
+ * @author shannah
+ */
+public class ChatAccount extends Entity {
+    
+    private static final EntityType TYPE = new EntityType() {{
+        name = string(Thing.name); <1>
+        thumbnailUrl = string(Thing.thumbnailUrl); <2>
+        phone = string(Person.telephone); <3>
+    }};
+    {
+        setEntityType(TYPE);
+    }
+    
+    public ChatAccount(String nm, String thumb, String phoneNum) { <4>
+        set(name, nm);
+        set(thumbnailUrl, thumb);
+        set(phone, phoneNum);
+    }
+    
+}
+
+----
+<1> We use the `Thing.name` tag for the field that stores the user name.
+<2> We use the `Thing.thumbnailUrl` tag for the field that stores the avatar.
+<3> We add a telephone field here as an example of one of the extra metadata fields that you may want to use.
+
+TIP: For the ChatAccount entity, we use mostly tags from the https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/Person.html[Person schema].  Though we are referencing https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/Thing.html#name[Thing.name] and https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/Thing.html#thumbnailUrl[Thing.thumbnailUrl], these could have equivalently been referenced as `Person.name` and `Person.thumbnailUrl` since `Thing` is a super-interface of `Person` and all fields are inherited.
+
+After this adjustment, you'll need to make a few changes to your app in places where you interact with the view model.  In the https://shannah.github.io/RADChatRoom/getting-started-tutorial.html#trueadding-text-messages-from-other-users[Adding Text Messages from other users] section of the Getting Started Tutorial, we created demo messages using the following method:
+
+[source,java]
+----
+// Create a single demo message
+private Entity createDemoMessage(String text,
+        Date datePosted,
+        String participant,
+        String iconUrl) {
+    ChatBubbleView.ViewModel msg = new ChatBubbleView.ViewModel();
+    msg.messageText(text)
+            .date(datePosted)
+            .iconUrl(iconUrl)
+            .isOwn(participant == null);
+    if (participant != null) {
+        msg.postedBy(participant);
+    }
+    return msg;
+
+}
+----
+
+Let's change this method to accept a `ChatAccount` object instead of the name and icon Url of the participant.  At the same time, we'll update it to use our custom view model for the demo message.
+
+[source,java]
+----
+private Entity createDemoMessage(String text, Date datePosted, ChatAccount participant) {
+    ChatMessageModel msg = new ChatMessageModel();
+    msg.set(ChatMessage.text, text);
+    msg.set(ChatMessage.datePublished, datePosted);
+    msg.set(ChatMessage.creator, participant);
+    msg.set(ChatMessage.isOwnMessage, participant == null);
+    
+    return msg;
+ 
+}
+----
+
+The following is the method that creates the view model for my demo chat room.  It demostrates how our view models are used:
+
+[source,java]
+----
+private Entity createViewModel() {
+    String georgeThumb = "https://weblite.ca/cn1tests/radchat/george.jpg";
+    String kramerThumb = "https://weblite.ca/cn1tests/radchat/kramer.jpg";
+    ChatAccount george = new ChatAccount("George", georgeThumb, "712-555-1234");
+    ChatAccount kramer = new ChatAccount("Kramer", kramerThumb, null);
+    
+    ChatRoomView.ViewModel room = new ChatRoomView.ViewModel();
+    long SECOND = 1000l;
+    long MINUTE = SECOND * 60;
+    long HOUR = MINUTE * 60;
+    long DAY = HOUR * 24;
+    long t = System.currentTimeMillis() - 2 * DAY;
+
+    
+    
+    room.addMessages(createDemoMessage("Why couldn't you have made me an architect? You know I always wanted to pretend that I was an architect. "
+            + "Well I'm supposed to see her tomorrow, I'm gonna tell her what's goin on. Maybe she likes me for me.",
+            new Date(t), george));
+    t += HOUR;
+    room.addMessages(createDemoMessage("Hey", new Date(t),kramer));
+    t += MINUTE;
+    room.addMessages(createDemoMessage("Hey", new Date(t), null));
+    
+    Entity vm = createDemoMessage("Hey ya want these? I don't want em!", new Date(t), kramer);
+    vm.setText(ChatMessage.attachmentPlaceholderImage, "https://weblite.ca/cn1tests/radchat/golf-clubs.jpg");
+    room.addMessages(vm);
+    
+    room.addParticipants(george, kramer);
+    
+    return room;
+}
+----
+
+
+
+

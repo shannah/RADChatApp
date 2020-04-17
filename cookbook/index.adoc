@@ -9,3 +9,5 @@ Steve Hannah
 Recipes for using the RADChatRoom component and customizing it to suit your needs.
 
 include::custom-chat-bubbles.adoc[]
+
+include::using-entity-for-posted-by.adoc[]
