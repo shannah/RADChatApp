@@ -592,7 +592,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                     Object currDate = value.get(v.dateProp);
                     if (prevDate instanceof Date && currDate instanceof Date) {
                         Date d1 = (Date)prevDate;
-                        Date d2 = (Date)prevDate;
+                        Date d2 = (Date)currDate;
                         if (Math.abs(d1.getTime() - d2.getTime()) < 1000 * 60 * 30l) {
                             v.hideDate = true;
                             v.date.setHidden(true);
