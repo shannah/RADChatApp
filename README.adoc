@@ -4,7 +4,7 @@ A full-featured Chat Room UI Component for https://www.codenameone.com/[Codename
 
 image::images/chat-ui-kit-feature.jpg[]
 
-image::https://shannah.github.io/RADChatRoom/images/Image-210220-105119.095.png[width=480]
+
 
 This component designed as a proof of concept for the https://github.com/shannah/CodeRAD[CodeRAD library], which facilitates the development of rich, reusable UI components for Codename One.  It contains everything you should need to incorporate chat into your mobile app.
 
@@ -27,6 +27,9 @@ NOTE: This component is only a UI component.  It doesn't connect to any back-end
 
 * Try https://shannah.github.io/RADChatRoom/demo[Javascript version] in your browser.
 * Download https://github.com/shannah/RADChatRoom/releases/download/1.0/CN1Chat-debug.apk[Android demo app].
+
+
+image::https://shannah.github.io/RADChatRoom/images/Image-210220-105119.095.png[width=480]
 
 NOTE: These demos aren't connected to any back-end server.  The contain some sample chat messages, and they allow you to post your own messages and images, which are just stored locally.
 
