@@ -2,6 +2,8 @@
 
 A full-featured Chat Room UI Component for https://www.codenameone.com/[Codename One]
 
+image::images/chat-ui-kit-feature.jpg[]
+
 image::https://shannah.github.io/RADChatRoom/images/Image-210220-105119.095.png[width=480]
 
 This component designed as a proof of concept for the https://github.com/shannah/CodeRAD[CodeRAD library], which facilitates the development of rich, reusable UI components for Codename One.  It contains everything you should need to incorporate chat into your mobile app.
