@@ -10,4 +10,6 @@ Recipes for using the RADChatRoom component and customizing it to suit your need
 
 include::custom-chat-bubbles.adoc[]
 
+include::disable-swipe-reveal.adoc[]
+
 include::using-entity-for-posted-by.adoc[]

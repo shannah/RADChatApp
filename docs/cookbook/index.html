@@ -447,7 +447,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_customizing_chat_bubbles_using_css">1. Customizing Chat Bubbles using CSS</a></li>
-<li><a href="#_using_an_entity_for_the_posted_by_property_of_chat_message">2. Using An Entity for The "Posted By" Property of Chat Message</a></li>
+<li><a href="#_disabling_swipe_left_to_reveal_time_posted">2. Disabling Swipe Left to Reveal Time Posted</a></li>
+<li><a href="#_using_an_entity_for_the_posted_by_property_of_chat_message">3. Using An Entity for The "Posted By" Property of Chat Message</a></li>
 </ul>
 </div>
 </div>
@@ -641,13 +642,72 @@ ChatBubbleTextOwn {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_using_an_entity_for_the_posted_by_property_of_chat_message">2. Using An Entity for The "Posted By" Property of Chat Message</h2>
+<h2 id="_disabling_swipe_left_to_reveal_time_posted">2. Disabling Swipe Left to Reveal Time Posted</h2>
 <div class="sectionbody">
 <h3 id="_problem_2" class="discrete">Problem</h3>
+<div class="imageblock">
+<div class="content">
+<img src="images/Image-290420-042743.374.png" alt="Image 290420 042743.374">
+</div>
+<div class="title">Figure 6. Screenshot showing the times of the messages shown along the right.  These are revealed while the user has swiped to the left.</div>
+</div>
+<div class="paragraph">
+<p>By default the ChatRoomView allows users to swipe a chat bubble to the left to see the time that is was posted.  In some cases this swiping behaviour may interfere with other gestures in your app, so you may wish to disable the behaviour.</p>
+</div>
+<h3 id="_solution_2" class="discrete">Solution</h3>
+<div class="paragraph">
+<p>Use the <a href="https://shannah.github.io/RADChatRoom/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.html#USE_OVERFLOW_CONTAINER">ChatBubbleView.USE_OVERFLOW_CONTAINER</a> view property in your view node to disable this behaviour as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import static com.codename1.rad.ui.UI.param;
+
+...
+
+
+Entity viewModel = ....;
+Form f = ...;
+ViewNode viewNode = new ViewNode(
+    param(ChatBubbleView.USE_OVERFLOW_CONTAINER, false),
+
+    // .. Other attributes in the view node...
+);
+
+ChatRoomView chatView = new ChatRoomView(viewModel, viewNode, f);
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the complete example code <a href="https://github.com/codenameone/CodenameOne/blob/9761ba30903dc1a52e1ca1b21f1296030f924f63/Samples/samples/RADChatRoomTest3/RADChatRoomTest3.java#L125">here</a>.</p>
+</div>
+<h3 id="_discussion" class="discrete">Discussion</h3>
+<div class="paragraph">
+<p>The <a href="https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/ui/ViewProperty.html?is-external=true">ViewProperty</a> is used throughout CodeRAD to add customization of components via the view node hierarchy.  Generally components will declare the view properties that they support in their javadocs, as public static final properties.  That is how the <code>USE_OVERFLOW_CONTAINER</code> property is defined in the <code>ChatBubbleView</code> component.  This particular view property allows us to "switch" off the swipe left behaviour in the chat room.</p>
+</div>
+<h3 id="_further_reading" class="discrete">Further Reading</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/ui/ViewProperty.html?is-external=true">ViewProperty javadocs</a></p>
+</li>
+<li>
+<p><a href="https://shannah.github.io/RADChatRoom/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.html#USE_OVERFLOW_CONTAINER">USE_OVERFLOW_CONTAINER javadocs</a></p>
+</li>
+<li>
+<p><a href="https://github.com/shannah/RADChatRoom/issues/18">RFE for this feature</a></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_an_entity_for_the_posted_by_property_of_chat_message">3. Using An Entity for The "Posted By" Property of Chat Message</h2>
+<div class="sectionbody">
+<h3 id="_problem_3" class="discrete">Problem</h3>
 <div class="paragraph">
 <p>You want to use an Entity for the <code>ChatMessage.creator</code> property in your chat message view model, rather than just incorporating "icon" and "posted by" string properties directly.</p>
 </div>
-<h3 id="_solution_2" class="discrete">Solution</h3>
+<h3 id="_solution_3" class="discrete">Solution</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -876,7 +936,7 @@ private Entity createDemoMessage(String text,
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-17 06:19:06 -0700
+Last updated 2020-04-29 16:35:56 -0700
 </div>
 </div>
 </body>
