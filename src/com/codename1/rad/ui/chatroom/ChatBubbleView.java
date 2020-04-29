@@ -35,8 +35,10 @@ import com.codename1.rad.schemas.Thing;
 import com.codename1.rad.text.LocalDateTimeShortStyleFormatter;
 import com.codename1.io.Log;
 import com.codename1.rad.attributes.UIID;
+import com.codename1.rad.models.ContentType;
 import com.codename1.rad.nodes.ActionNode;
 import com.codename1.rad.ui.UI;
+import com.codename1.rad.ui.ViewProperty;
 import com.codename1.rad.ui.animations.TypingAnimation;
 import com.codename1.rad.ui.entityviews.ProfileAvatarView;
 import com.codename1.rad.ui.entityviews.EntityListView;
@@ -133,7 +135,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
      */
     public static final Category CHAT_BUBBLE_BADGES = new Category();
     
-    
+    private boolean useOverflowContainer = true;
     private boolean hideDate;
     private Node viewNode;
     public static final Tag TEXT = ChatMessage.text;
@@ -165,7 +167,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
         postedByProp = entity.findProperty(Comment.creator);
         
         iconProp = entity.findProperty(icon, Comment.thumbnailUrl);
-        
+        useOverflowContainer = (Boolean)viewNode.getViewParameterValue(USE_OVERFLOW_CONTAINER, true);
         dateProp = entity.findProperty(Comment.datePublished, Comment.dateCreated, Comment.dateModified);
         typingInProgress = entity.findProperty(ChatMessage.typingInProgress);
         isOwnProp = entity.findProperty(ChatMessage.isOwnMessage);
@@ -509,7 +511,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 wrapper.add(WEST, BoxLayout.encloseYBottom(avatar == null ? iconLabel : avatar));
             }
             wrapper.add(CENTER, center);
-            if (date.getText() != null && date.getText().length() > 0) {
+            if (useOverflowContainer && date.getText() != null && date.getText().length() > 0) {
                 Label date2 = new Label(date.getText());
                 date2.setUIID("ChatBubbleDate");
                 OverflowContainer overflowContainer = new OverflowContainer(wrapper, date2) {
@@ -800,5 +802,11 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
             return get(attachmentImageUrl);
         }
     }
+    
+    /**
+     * View property that can be used to indicate that the chat room should use or not
+     * use an overflow container for the time of a text.
+     */
+    public static final ViewProperty<Boolean> USE_OVERFLOW_CONTAINER = new ViewProperty<Boolean>(ContentType.BooleanType);
     
 }
