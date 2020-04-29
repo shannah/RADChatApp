@@ -33,6 +33,7 @@ import com.codename1.rad.schemas.Comment;
 import com.codename1.rad.ui.entityviews.ProfileAvatarView;
 import com.codename1.rad.ui.entityviews.ProfileAvatarsTitleComponent;
 import com.codename1.rad.ui.entityviews.EntityListView;
+import com.codename1.ui.Button;
 import com.codename1.ui.CN;
 import static com.codename1.ui.CN.SOUTH;
 import com.codename1.ui.Component;
@@ -201,13 +202,14 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
             // way to properly have an enter button in the VKB AND have a submit/done button.
             entryField.setDoneListener(evt->{
 
-                System.out.println("Received message.");
+                //System.out.println("Received message.");
 
                 if (te != null) {
                     Map extra = new HashMap();
                     extra.put(SEND_ACTION, entryField.getText());
-                    System.out.println("Firing event");
+                    //System.out.println("Firing event");
                     te.fireEvent(entity, this, extra);
+                    entryField.startEditingAsync();
 
                 }
             });
@@ -216,6 +218,11 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         Component sendActionCmp = null;
         if (te != null) {
             sendActionCmp = te.createView(getEntity());
+            if (sendActionCmp instanceof Button) {
+                ((Button)sendActionCmp).addActionListener(evt->{
+                    entryField.startEditingAsync();
+                });
+            }
         }
         
         
