@@ -158,6 +158,7 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
      */
     public ChatBubbleView(T entity, Node viewNode) {
         super(entity);
+        $(this).addTags("ChatBubbleView");
         this.viewNode = viewNode;
         setLayout(new BorderLayout());
         textProp = entity.findProperty(TEXT, Thing.description);

@@ -328,7 +328,32 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         
     }
     
+    /**
+     * Returns the ChatBubbleView that corresponds with the given message entity.
+     * @param message
+     * @return 
+     */
+    public ChatBubbleView getChatBubbleView(Entity message) {
+        return $(".ChatBubbleView", this).filter(c->{
+            if (c.getClass() == ChatBubbleView.class) {
+                ChatBubbleView bubble = (ChatBubbleView)c;
+                
+                return bubble.getEntity() == message;
+            }
+            return false;
+        }).asComponent(ChatBubbleView.class);
+    }
     
+    /**
+     * Scrolls the chat view to the given message.
+     * @param message The message entity to scroll to.
+     */
+    public void scrollToMessage(Entity message) {
+        ChatBubbleView view = getChatBubbleView(message);
+        if (view != null) {
+            view.getParent().scrollComponentToVisible(view);
+        } 
+    }
 
     @Override
     public void bind() {
