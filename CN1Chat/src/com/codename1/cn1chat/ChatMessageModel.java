@@ -19,6 +19,7 @@ public class ChatMessageModel extends Entity {
         date(ChatMessage.datePublished);
         entity(ChatAccount.class, ChatMessage.creator);
         Boolean(ChatMessage.isOwnMessage);
+        Boolean(ChatMessage.isFavorite);
         string(ChatMessage.attachmentPlaceholderImage);
     }};
     {
