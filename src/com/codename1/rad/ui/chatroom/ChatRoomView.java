@@ -186,7 +186,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
                 }
                 Form f = getComponentForm();
                 if (f != null) {
-                    f.revalidateWithAnimationSafety();
+                    f.revalidateLater();
                 }
             }
             if (CN.isDesktop() || CN.isSimulator()) {
@@ -355,11 +355,6 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
         } 
     }
 
-    @Override
-    public void bind() {
-        super.bind();
-        
-    }
     
     
 

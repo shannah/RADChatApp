@@ -222,19 +222,6 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
 
 
     
-    @Override
-    protected void initComponent() {
-        super.initComponent();
-        
-    }
-
-    @Override
-    protected void deinitialize() {
-
-        super.deinitialize();
-    }
-
-    
     private boolean lastTypingInProgress;
     private String lastAttachmentPlaceholderImageURL;
     
@@ -591,7 +578,16 @@ public class ChatBubbleView<T extends Entity> extends AbstractEntityView<T> {
                 ChatBubbleView v = new ChatBubbleView(value, listNode.getRowTemplate());
                 if (index > 0 && v.dateProp != null) {
                     Entity prev = listEntity.get(index-1);
-                    Object prevDate = prev.get(v.dateProp);
+                    
+                    Object prevDate = prev.getEntityType().contains(v.dateProp) ?
+                        prev.get(v.dateProp) :
+                        prev.getDate(
+                                Comment.datePublished, 
+                                Comment.dateCreated, 
+                                Comment.dateModified
+                        )
+                        ;
+                    
                     Object currDate = value.get(v.dateProp);
                     if (prevDate instanceof Date && currDate instanceof Date) {
                         Date d1 = (Date)prevDate;
