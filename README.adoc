@@ -1,6 +1,6 @@
-= RADChatRoom
+= RADChatApp
 
-A full-featured Chat Room UI Component for https://www.codenameone.com/[Codename One]
+RADChatApp is a full-featured chat room app UI component in Java/Kotlin for https://www.codenameone.com/[Codename One]. It helps building an elaborate cross-platform chat app UI much faster. Easily customizable to clone UI of social chat apps like WhatsApp, Twitter or Messenger etc.
 
 image::images/chat-ui-kit-feature.jpg[]
 
