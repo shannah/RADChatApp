@@ -192,7 +192,7 @@ public class ChatRoomView<T extends Entity> extends AbstractEntityView<T> {
             if (CN.isDesktop() || CN.isSimulator()) {
                 // This shouldn't be necessary, but some users have reported that 
                 // text field does not update when typing.
-                // https://github.com/shannah/RADChatRoom/issues/3
+                // https://github.com/shannah/RADChatApp/issues/3
                 entryField.repaint();
             }
         });

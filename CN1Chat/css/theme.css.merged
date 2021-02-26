@@ -1,5 +1,5 @@
 
-/* /Users/shannah/cn1_files/cn1libs/RADChatRoom/CN1Chat/lib/impl/css/CodeRAD/theme.css */
+/* /Users/shannah/cn1_files/cn1libs/RADChatApp/CN1Chat/lib/impl/css/CodeRAD/theme.css */
 :root {
     --rad-main-font: 'native:MainRegular';
     --rad-main-font-light: 'native:MainLight';
@@ -142,9 +142,9 @@ FieldDescriptionText {
     font-family: var(--rad-main-font);
     color: #666666;
 }
-/* end /Users/shannah/cn1_files/cn1libs/RADChatRoom/CN1Chat/lib/impl/css/CodeRAD/theme.css*/
+/* end /Users/shannah/cn1_files/cn1libs/RADChatApp/CN1Chat/lib/impl/css/CodeRAD/theme.css*/
 
-/* /Users/shannah/cn1_files/cn1libs/RADChatRoom/CN1Chat/lib/impl/css/RADChatRoom/theme.css */
+/* /Users/shannah/cn1_files/cn1libs/RADChatApp/CN1Chat/lib/impl/css/RADChatApp/theme.css */
 ChatBubbleTextOwn {
     font-family: 'native:MainLight';
     font-size: 2.5mm;
@@ -253,9 +253,9 @@ TypingAnimationDot {
     color:#666666;
     font-size: 1mm;
 }
-/* end /Users/shannah/cn1_files/cn1libs/RADChatRoom/CN1Chat/lib/impl/css/RADChatRoom/theme.css*/
+/* end /Users/shannah/cn1_files/cn1libs/RADChatApp/CN1Chat/lib/impl/css/RADChatApp/theme.css*/
 
-/* /Users/shannah/cn1_files/cn1libs/RADChatRoom/CN1Chat/css/theme.css */
+/* /Users/shannah/cn1_files/cn1libs/RADChatApp/CN1Chat/css/theme.css */
 #Constants {
     includeNativeBool: true; 
 }
@@ -295,4 +295,4 @@ ChatBubbleTextOwn {
     color: black;
     margin:2mm;
 }
-/* End /Users/shannah/cn1_files/cn1libs/RADChatRoom/CN1Chat/css/theme.css */
+/* End /Users/shannah/cn1_files/cn1libs/RADChatApp/CN1Chat/css/theme.css */

@@ -10,7 +10,7 @@ You want to use an Entity for the `ChatMessage.creator` property in your chat me
 
 [NOTE]
 ====
-The https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial] uses the reference class https://shannah.github.io/RADChatRoom/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.ViewModel.html[ChatBubbleView.ViewModel] as the view model for its chat bubbles. This recipe assumes that you're already using a custom entity class for your Chat message view model.  This class may look something like:
+The https://shannah.github.io/RADChatApp/getting-started-tutorial.html[Getting Started Tutorial] uses the reference class https://shannah.github.io/RADChatApp/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.ViewModel.html[ChatBubbleView.ViewModel] as the view model for its chat bubbles. This recipe assumes that you're already using a custom entity class for your Chat message view model.  This class may look something like:
 
 .A sample view model for a ChatMessage.
 [source,java]
@@ -107,7 +107,7 @@ public class ChatAccount extends Entity {
 
 TIP: For the ChatAccount entity, we use mostly tags from the https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/Person.html[Person schema].  Though we are referencing https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/Thing.html#name[Thing.name] and https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/schemas/Thing.html#thumbnailUrl[Thing.thumbnailUrl], these could have equivalently been referenced as `Person.name` and `Person.thumbnailUrl` since `Thing` is a super-interface of `Person` and all fields are inherited.
 
-After this adjustment, you'll need to make a few changes to your app in places where you interact with the view model.  In the https://shannah.github.io/RADChatRoom/getting-started-tutorial.html#trueadding-text-messages-from-other-users[Adding Text Messages from other users] section of the Getting Started Tutorial, we created demo messages using the following method:
+After this adjustment, you'll need to make a few changes to your app in places where you interact with the view model.  In the https://shannah.github.io/RADChatApp/getting-started-tutorial.html#trueadding-text-messages-from-other-users[Adding Text Messages from other users] section of the Getting Started Tutorial, we created demo messages using the following method:
 
 [source,java]
 ----

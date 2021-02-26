@@ -11,7 +11,7 @@ By default the ChatRoomView allows users to swipe a chat bubble to the left to s
 [discrete]
 === Solution
 
-Use the https://shannah.github.io/RADChatRoom/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.html#USE_OVERFLOW_CONTAINER[ChatBubbleView.USE_OVERFLOW_CONTAINER] view property in your view node to disable this behaviour as follows:
+Use the https://shannah.github.io/RADChatApp/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.html#USE_OVERFLOW_CONTAINER[ChatBubbleView.USE_OVERFLOW_CONTAINER] view property in your view node to disable this behaviour as follows:
 
 [source,java]
 ----
@@ -43,8 +43,8 @@ The https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/ui/ViewProperty.
 === Further Reading
 
 . https://shannah.github.io/CodeRAD/javadoc/com/codename1/rad/ui/ViewProperty.html?is-external=true[ViewProperty javadocs]
-. https://shannah.github.io/RADChatRoom/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.html#USE_OVERFLOW_CONTAINER[USE_OVERFLOW_CONTAINER javadocs]
-. https://github.com/shannah/RADChatRoom/issues/18[RFE for this feature]
+. https://shannah.github.io/RADChatApp/javadoc/com/codename1/rad/ui/chatroom/ChatBubbleView.html#USE_OVERFLOW_CONTAINER[USE_OVERFLOW_CONTAINER javadocs]
+. https://github.com/shannah/RADChatApp/issues/18[RFE for this feature]
 
 
 

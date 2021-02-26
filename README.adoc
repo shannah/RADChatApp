@@ -25,29 +25,29 @@ NOTE: This component is only a UI component.  It doesn't connect to any back-end
 
 == Demo
 
-* Try https://shannah.github.io/RADChatRoom/demo[Javascript version] in your browser.
-* Download https://github.com/shannah/RADChatRoom/releases/download/1.0/CN1Chat-debug.apk[Android demo app].
+* Try https://shannah.github.io/RADChatApp/demo[Javascript version] in your browser.
+* Download https://github.com/shannah/RADChatApp/releases/download/1.0/CN1Chat-debug.apk[Android demo app].
 
 
-image::https://shannah.github.io/RADChatRoom/images/Image-210220-105119.095.png[width=480]
+image::https://shannah.github.io/RADChatApp/images/Image-210220-105119.095.png[width=480]
 
 NOTE: These demos aren't connected to any back-end server.  The contain some sample chat messages, and they allow you to post your own messages and images, which are just stored locally.
 
-See how to build this demo in the https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+See how to build this demo in the https://shannah.github.io/RADChatApp/getting-started-tutorial.html[Getting Started Tutorial]
 
 == Documentation
 
-. https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
-. https://shannah.github.io/RADChatRoom/javadoc/[Javadoc]
-. https://shannah.github.io/RADChatRoom/cookbook[RADChatRoom Cookbook] - A growing list of recipes to show you how to customize the chatroom component.
+. https://shannah.github.io/RADChatApp/getting-started-tutorial.html[Getting Started Tutorial]
+. https://shannah.github.io/RADChatApp/javadoc/[Javadoc]
+. https://shannah.github.io/RADChatApp/cookbook[RADChatRoom Cookbook] - A growing list of recipes to show you how to customize the chatroom component.
 
 == Requirements 
 
-See https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+See https://shannah.github.io/RADChatApp/getting-started-tutorial.html[Getting Started Tutorial]
 
 == Installation
 
-See https://shannah.github.io/RADChatRoom/getting-started-tutorial.html[Getting Started Tutorial]
+See https://shannah.github.io/RADChatApp/getting-started-tutorial.html[Getting Started Tutorial]
 
 == Further Reading
 
