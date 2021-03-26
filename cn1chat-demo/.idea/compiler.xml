@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cn1chat-demo-javase" />
+        <module name="cn1chat-demo-common" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cn1chat-demo" target="8" />
+      <module name="cn1chat-demo-cn1libs" target="8" />
+      <module name="cn1chat-demo-common" target="1.8" />
+      <module name="cn1chat-demo-javase" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

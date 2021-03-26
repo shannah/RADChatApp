@@ -1,10 +1,2 @@
-*.jar
-private
-lib/impl
-build
-dist
-lib/CodenameOne_SRC.zip
-nbproject/build-impl.xml~
-CN1Chat/lib/impl/
+target
 .DS_Store
-!asciidoclet-1.5.7-SNAPSHOT-shaded.jar
