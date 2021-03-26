@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.codenameone</groupId>
             <artifactId>coderad-lib</artifactId>
-            <version>1.0.1</version>
+            <version>${coderad.version}</version>
             <type>pom</type>
         </dependency>
     </dependencies>

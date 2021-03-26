@@ -22,51 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/.cn1_css_checksums" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/Versions.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/build.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/codenameone_settings.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/.backups/theme.res.1582322211546.bak" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/.backups/theme.res.1582473634068.bak" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/images/chat-bubble-left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/images/chat-bubble-right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/images/iphone-chat-bubble.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/theme.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/theme.css.merged" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/css/theme.css.merged.checksums" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/lib/CodeRAD.cn1lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/lib/CodenameOne_SRC.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/lib/RADChatRoom.cn1lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/manifest.mf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/nbproject/build-impl.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/nbproject/genfiles.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/nbproject/nativej2me.res" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/nbproject/project.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/nbproject/project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/src/com/codename1/cn1chat/CN1Chat.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/src/com/codename1/cn1chat/ChatAccount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/src/com/codename1/cn1chat/ChatFormController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/src/com/codename1/cn1chat/ChatMessageModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CN1Chat/src/theme.res" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codenameone_library_appended.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codenameone_library_required.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../css/theme.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/asciidoclet-1.5.7-SNAPSHOT-shaded.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manifest.mf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manifest.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nbproject/build-impl.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nbproject/genfiles.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nbproject/nativej2me.res" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nbproject/project.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nbproject/project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/com/codename1/rad/ui/chatroom/ChatBubbleView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/com/codename1/rad/ui/chatroom/ChatRoomView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/overview.adoc" beforeDir="false" />
-    </list>
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -829,26 +785,26 @@
     </state>
     <state x="167" y="63" width="1071" height="779" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1440.817@0.25.1440.817" timestamp="1613591898592" />
     <state x="297" y="88" key="#com.intellij.execution.impl.EditConfigurationsDialog/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1613675369173" />
-    <state width="1857" height="258" key="GridCell.Tab.0.bottom" timestamp="1613673746962">
+    <state width="1857" height="318" key="GridCell.Tab.0.bottom" timestamp="1616777403434">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.bottom/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="258" key="GridCell.Tab.0.bottom/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1613673746962" />
-    <state width="1857" height="258" key="GridCell.Tab.0.center" timestamp="1613673746961">
+    <state width="1857" height="318" key="GridCell.Tab.0.bottom/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1616777403434" />
+    <state width="1857" height="318" key="GridCell.Tab.0.center" timestamp="1616777403432">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.center/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="258" key="GridCell.Tab.0.center/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1613673746961" />
-    <state width="1857" height="258" key="GridCell.Tab.0.left" timestamp="1613673746960">
+    <state width="1857" height="318" key="GridCell.Tab.0.center/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1616777403432" />
+    <state width="1857" height="318" key="GridCell.Tab.0.left" timestamp="1616777403432">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.left/0.25.1440.817@0.25.1440.817" timestamp="1613592228432" />
-    <state width="1857" height="258" key="GridCell.Tab.0.left/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1613673746960" />
-    <state width="1857" height="258" key="GridCell.Tab.0.right" timestamp="1613673746961">
+    <state width="1857" height="318" key="GridCell.Tab.0.left/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1616777403432" />
+    <state width="1857" height="318" key="GridCell.Tab.0.right" timestamp="1616777403433">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.right/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="258" key="GridCell.Tab.0.right/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1613673746961" />
+    <state width="1857" height="318" key="GridCell.Tab.0.right/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1616777403433" />
     <state width="1857" height="258" key="GridCell.Tab.1.bottom" timestamp="1613673760461">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
