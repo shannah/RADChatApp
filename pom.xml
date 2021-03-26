@@ -4,7 +4,7 @@
 
     <groupId>com.codenameone</groupId>
     <artifactId>chat-ui-kit</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Codename One Chat UI Kit</name>

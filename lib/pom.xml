@@ -4,11 +4,11 @@
   <parent>
       <groupId>com.codenameone</groupId>
       <artifactId>chat-ui-kit</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3-SNAPSHOT</version>
   </parent>
   <groupId>com.codenameone</groupId>
   <artifactId>chat-ui-kit-lib</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>chat-ui-kit-lib</name>
   
