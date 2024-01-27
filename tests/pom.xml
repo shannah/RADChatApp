@@ -45,7 +45,7 @@
     </distributionManagement>-->
 	  
     <properties>
-        <cn1.version>7.0.8-b6</cn1.version>
+        <cn1.version>7.0.71</cn1.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	      
         <java.version>1.8</java.version>
